@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Two Team Stopwatch</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f4f4f4;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 25px;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+      flex-wrap: wrap;
+    }
+
+    .team {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      width: 300px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .time {
+      font-size: 60px;
+      font-weight: bold;
+      margin: 25px 0;
+    }
+
+    button {
+      font-size: 20px;
+      padding: 14px 22px;
+      margin: 6px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .start {
+      background: #28a745;
+      color: white;
+    }
+
+    .pause {
+      background: #ffc107;
+      color: black;
+    }
+
+    .reset {
+      background: #dc3545;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Two Team Stopwatch</h1>
+
+  <div class="container">
+
+    <div class="team">
+      <h2>Team A</h2>
+      <div id="timeA" class="time">00:00</div>
+      <button class="start" onclick="startTimer('A')">Start</button>
+      <button class="pause" onclick="pauseTimer('A')">Pause</button>
+      <button class="reset" onclick="resetTimer('A')">Reset</button>
+    </div>
+
+    <div class="team">
+      <h2>Team B</h2>
+      <div id="timeB" class="time">00:00</div>
+      <button class="start" onclick="startTimer('B')">Start</button>
+      <button class="pause" onclick="pauseTimer('B')">Pause</button>
+      <button class="reset" onclick="resetTimer('B')">Reset</button>
+    </div>
+
+  </div>
+
+  <script>
+    var timers = {
+      A: {
+        seconds: 0,
+        interval: null
+      },
+      B: {
+        seconds: 0,
+        interval: null
+      }
+    };
+
+    function formatTime(totalSeconds) {
+      var minutes = Math.floor(totalSeconds / 60);
+      var seconds = totalSeconds % 60;
+
+      if (minutes < 10) {
+        minutes = "0" + minutes;
+      }
+
+      if (seconds < 10) {
+        seconds = "0" + seconds;
+      }
+
+      return minutes + ":" + seconds;
+    }
+
+    function updateDisplay(team) {
+      document.getElementById("time" + team).innerHTML =
+        formatTime(timers[team].seconds);
+    }
+
+    function startTimer(team) {
+      if (timers[team].interval !== null) {
+        return;
+      }
+
+      timers[team].interval = setInterval(function() {
+        timers[team].seconds = timers[team].seconds + 1;
+        updateDisplay(team);
+      }, 1000);
+    }
+
+    function pauseTimer(team) {
+      if (timers[team].interval !== null) {
+        clearInterval(timers[team].interval);
+        timers[team].interval = null;
+      }
+    }
+
+    function resetTimer(team) {
+      pauseTimer(team);
+      timers[team].seconds = 0;
+      updateDisplay(team);
+    }
+  </script>
+
+</body>
+</html>
